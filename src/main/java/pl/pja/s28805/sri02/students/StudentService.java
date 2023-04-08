@@ -2,7 +2,7 @@ package pl.pja.s28805.sri02.students;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
+//Student service implementuje StudentRepository
 @Component
 @RequiredArgsConstructor
 public class StudentService {

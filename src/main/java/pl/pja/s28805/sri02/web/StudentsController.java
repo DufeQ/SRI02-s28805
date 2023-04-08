@@ -1,10 +1,12 @@
 package pl.pja.s28805.sri02.web;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.pja.s28805.sri02.students.Student;
 import pl.pja.s28805.sri02.students.StudentDto;
 import pl.pja.s28805.sri02.students.StudentService;
 
@@ -15,6 +17,11 @@ import java.util.Random;
 @RequiredArgsConstructor
 @RequestMapping("/api/students")
 public class StudentsController {
+
+    private final ModelMapper modelMapper;
+
+    private StudentDto convertToDto(Student stud) {return modelMapper.map(stud, StudentDto.class);}
+    private Student converToStudent(StudentDto stud) {return modelMapper.map(stud, Student.class);}
 
     private final StudentService studentService;
     @GetMapping("/test")
