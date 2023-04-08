@@ -1,17 +1,22 @@
 package pl.pja.s28805.sri02.web;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.pja.s28805.sri02.students.StudentDto;
+import pl.pja.s28805.sri02.students.StudentService;
 
 import java.util.List;
+import java.util.Random;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/students")
 public class StudentsController {
 
+    private final StudentService studentService;
     @GetMapping("/test")
     //@RequestMapping("/test") alternatywnie
     public String getString(){
@@ -20,8 +25,17 @@ public class StudentsController {
 
     @GetMapping
     public ResponseEntity<List<StudentDto>> getStudents(){
-        final List<StudentDto> list = List.of(new StudentDto("Bartosz", "J", "s28805"));
+        final List<StudentDto> list = List.of(new StudentDto(1L,"Bartosz", "J", "s28805"));
         return ResponseEntity.ok(list);
+    }
+
+    @PostMapping
+    public ResponseEntity<Long> addStudent(@RequestBody final StudentDto student){
+        final Long result = studentService.addStudent(student.getImie(), student.getNazwisko(), student.getNrIndeksu());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(result);
     }
 
 

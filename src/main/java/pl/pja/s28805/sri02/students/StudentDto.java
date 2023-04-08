@@ -9,7 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class StudentDto {
+    private Long id;
     private String imie;
     private String nazwisko;
     private String nrIndeksu;
-    }
+}
