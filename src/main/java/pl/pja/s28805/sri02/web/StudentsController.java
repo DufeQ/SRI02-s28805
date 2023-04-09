@@ -33,12 +33,7 @@ public class StudentsController {
 
     @GetMapping
     public ResponseEntity<List<StudentDto>> getStudents(){
-        final List<Student> studentList = studentService.findAll();
-        final List<StudentDto> studentDtoList = studentList.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(studentDtoList);
-
+        return ResponseEntity.ok(studentService.getStudents());
     }
 
     @PostMapping
