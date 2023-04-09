@@ -46,5 +46,15 @@ public class StudentService{
         return convertToDto(student);
     }
 
+    public StudentDto modifyStudent(final Long studentDtoId, final StudentDto studentDto){
+        Optional<Student> student = repository.findById(studentDtoId);
+        Student student1 = student.get();
+        student1.setImie(studentDto.getImie());
+        student1.setNazwisko(studentDto.getNazwisko());
+        student1.setNrIndeksu(studentDto.getNrIndeksu());
+        repository.save(student1);
+        return convertToDto(student1);
+    }
+
 
 }

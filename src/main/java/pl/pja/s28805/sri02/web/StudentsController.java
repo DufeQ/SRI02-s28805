@@ -42,5 +42,14 @@ public class StudentsController {
                 .body(studentService.addStudent(student));
     }
 
+    @PutMapping
+    public ResponseEntity<StudentDto> modifyStudent(@RequestParam final Long id, @RequestBody final StudentDto studentDto){
+        if (studentService.getStudentById(id) == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        else {
+            return ResponseEntity.ok(studentService.modifyStudent(id, studentDto));
+        }
+    }
+
 
 }
