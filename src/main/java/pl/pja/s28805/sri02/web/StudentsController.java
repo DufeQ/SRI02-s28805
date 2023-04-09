@@ -19,12 +19,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/students")
 public class StudentsController {
 
-    private final ModelMapper modelMapper;
-
-    private StudentDto convertToDto(Student stud) {return modelMapper.map(stud, StudentDto.class);}
-    private Student converToStudent(StudentDto stud) {return modelMapper.map(stud, Student.class);}
-
     private final StudentService studentService;
+
     @GetMapping("/test")
     //@RequestMapping("/test") alternatywnie
     public String getString(){

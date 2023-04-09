@@ -2,7 +2,9 @@ package pl.pja.s28805.sri02.students;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class StudentService{
+
     private final ModelMapper modelMapper;
     private final StudentRepository repository;
 
@@ -26,10 +29,6 @@ public class StudentService{
 
         return student.getId();
     }
-
-//    public List<Student> findAll() {
-//        return repository.findAll();
-//    }
 
     public List<StudentDto> getStudents(){
         final List<Student> studentList = repository.findAll();
