@@ -24,13 +24,6 @@ public class StudentService{
     private StudentDto convertToDto(Student stud) {return modelMapper.map(stud, StudentDto.class);}
     private Student convertToStudent(StudentDto stud) {return modelMapper.map(stud, Student.class);}
 
-    public Long addStudent(final String imie, final String nazwisko, final String nrIndeksu){
-        Student student = new Student(imie, nazwisko, nrIndeksu);
-        student = repository.save(student);
-
-        return student.getId();
-    }
-
     public List<StudentDto> getStudents(){
         final List<Student> studentList = repository.findAll();
         final List<StudentDto> studentDtoList = studentList.stream()
@@ -46,5 +39,12 @@ public class StudentService{
         else
             return null;
     }
+
+    public StudentDto addStudent(StudentDto studentDto){
+        Student student = new Student(studentDto.getImie(), studentDto.getNazwisko(), studentDto.getNrIndeksu());
+        student = repository.save(student);
+        return convertToDto(student);
+    }
+
 
 }

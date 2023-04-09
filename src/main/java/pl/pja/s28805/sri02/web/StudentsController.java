@@ -36,12 +36,10 @@ public class StudentsController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> addStudent(@RequestBody final StudentDto student){
-        final Long result = studentService.addStudent(student.getImie(), student.getNazwisko(), student.getNrIndeksu());
-
-        return ResponseEntity
+    public ResponseEntity<StudentDto> addStudent(@RequestBody final StudentDto student){
+                return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(result);
+                .body(studentService.addStudent(student));
     }
 
 
