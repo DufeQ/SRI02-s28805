@@ -12,6 +12,7 @@ import pl.pja.s28805.sri02.students.StudentService;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,8 +33,11 @@ public class StudentsController {
 
     @GetMapping
     public ResponseEntity<List<StudentDto>> getStudents(){
-        final List<StudentDto> list = List.of(new StudentDto(1L,"Bartosz", "J", "s28805"));
-        return ResponseEntity.ok(list);
+        final List<Student> studentList = studentService.findAll();
+        final List<StudentDto> studentDtoList = studentList.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(studentDtoList);
     }
 
     @PostMapping
