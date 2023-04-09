@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -21,7 +22,7 @@ public class StudentService{
 
 
     private StudentDto convertToDto(Student stud) {return modelMapper.map(stud, StudentDto.class);}
-    private Student converToStudent(StudentDto stud) {return modelMapper.map(stud, Student.class);}
+    private Student convertToStudent(StudentDto stud) {return modelMapper.map(stud, Student.class);}
 
     public Long addStudent(final String imie, final String nazwisko, final String nrIndeksu){
         Student student = new Student(imie, nazwisko, nrIndeksu);
@@ -36,6 +37,14 @@ public class StudentService{
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
         return studentDtoList;
+    }
+
+    public StudentDto getStudentById(final Long studentId) {
+        Optional<Student> student = repository.findById(studentId);
+        if (student.isPresent())
+            return convertToDto(student.get());
+        else
+            return null;
     }
 
 }

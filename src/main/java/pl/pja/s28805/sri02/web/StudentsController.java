@@ -21,10 +21,13 @@ public class StudentsController {
 
     private final StudentService studentService;
 
-    @GetMapping("/test")
-    //@RequestMapping("/test") alternatywnie
-    public String getString(){
-        return "Hello world!";
+    @GetMapping("/{studentId}")
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable final Long studentId) {
+        StudentDto studentDto = studentService.getStudentById(studentId);
+        if (studentDto == null)
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        else
+            return ResponseEntity.ok(studentDto);
     }
 
     @GetMapping
