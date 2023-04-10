@@ -56,5 +56,11 @@ public class StudentService{
         return convertToDto(student1);
     }
 
+    public void deleteStudent(final Long id){
+        Optional<Student> student = repository.findById(id);
+        Student student1 = student.get();
+        repository.delete(student1);
+    }
+
 
 }

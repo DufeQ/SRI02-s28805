@@ -21,9 +21,9 @@ public class StudentsController {
 
     private final StudentService studentService;
 
-    @GetMapping("/{studentId}")
-    public ResponseEntity<StudentDto> getStudentById(@PathVariable final Long studentId) {
-        StudentDto studentDto = studentService.getStudentById(studentId);
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable final Long id) {
+        StudentDto studentDto = studentService.getStudentById(id);
         if (studentDto == null)
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else
@@ -51,8 +51,15 @@ public class StudentsController {
         }
     }
 
-//    @DeleteMapping
-//    public ResponseEntity deleteStudent()
-//
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteStudent(@PathVariable final Long id){
+        if (studentService.getStudentById(id) == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        else {
+            studentService.deleteStudent(id);
+            return ResponseEntity.ok(null);
+        }
+    }
+
 
 }
