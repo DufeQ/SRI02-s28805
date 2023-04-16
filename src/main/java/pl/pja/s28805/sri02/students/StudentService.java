@@ -46,6 +46,7 @@ public class StudentService{
         return convertToDto(student);
     }
 
+    //Warto byłoby dodać isPresent() i w przypadku false zwracac null;
     public StudentDto modifyStudent(final Long studentDtoId, final StudentDto studentDto){
         Optional<Student> student = repository.findById(studentDtoId);
         Student student1 = student.get();
