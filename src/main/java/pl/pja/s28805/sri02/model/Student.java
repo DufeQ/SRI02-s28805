@@ -1,10 +1,6 @@
-package pl.pja.s28805.sri02.students;
+package pl.pja.s28805.sri02.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,4 +23,8 @@ public class Student {
         this.nazwisko = nazwisko;
         this.nrIndeksu = nrIndeksu;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "grupa_id")
+    private Grupa grupa;
 }

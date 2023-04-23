@@ -1,4 +1,4 @@
-package pl.pja.s28805.sri02.students;
+package pl.pja.s28805.sri02.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

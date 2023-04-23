@@ -1,18 +1,13 @@
-package pl.pja.s28805.sri02.web;
+package pl.pja.s28805.sri02.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.pja.s28805.sri02.students.Student;
-import pl.pja.s28805.sri02.students.StudentDto;
+import pl.pja.s28805.sri02.dto.StudentDto;
 import pl.pja.s28805.sri02.students.StudentService;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,11 +31,12 @@ public class StudentsController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentDto> addStudent(@RequestBody final StudentDto student){
+    public ResponseEntity<StudentDto> addStudent(@RequestBody final StudentDto studentDto){
                 return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(studentService.addStudent(student));
+                .body(studentService.addStudent(studentDto));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentDto> modifyStudent(@PathVariable final Long id, @RequestBody final StudentDto studentDto){
@@ -60,6 +56,4 @@ public class StudentsController {
             return ResponseEntity.ok(null);
         }
     }
-
-
 }
