@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.pja.s28805.sri02.dto.GrupaDetailsDto;
 import pl.pja.s28805.sri02.dto.GrupaDto;
 import pl.pja.s28805.sri02.students.GrupaService;
 import pl.pja.s28805.sri02.students.StudentService;
@@ -19,13 +20,14 @@ public class GrupaController {
     private final GrupaService grupaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<GrupaDto> getGrupaById(@PathVariable final Long id) {
-        GrupaDto grupaDto = grupaService.getGrupaById(id);
+    public ResponseEntity<GrupaDetailsDto> getGrupaById(@PathVariable final Long id) {
+        GrupaDetailsDto grupaDto = grupaService.getGrupaById(id);
         if (grupaDto == null)
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         else
             return ResponseEntity.ok(grupaDto);
     }
+
 
     @GetMapping
     public ResponseEntity<List<GrupaDto>> getGrupy(){
@@ -49,6 +51,18 @@ public class GrupaController {
         }
     }
 
+    @PutMapping("/{id}/{idStudent}")
+    public ResponseEntity<GrupaDetailsDto> modifyGrupa(@PathVariable final Long id, @PathVariable final Long idStudent){
+        if (studentService.getStudentById(idStudent) == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        else {
+            if (grupaService.getGrupaById(id) == null)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            else {
+                return ResponseEntity.ok(grupaService.modifyGrupa(id, idStudent));
+            }
+        }
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity deleteGroup(@PathVariable final Long id){
         if (grupaService.getGrupaById(id) == null)
