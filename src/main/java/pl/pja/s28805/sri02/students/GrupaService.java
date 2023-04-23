@@ -39,7 +39,7 @@ public class GrupaService {
     }
 
     public GrupaDto addGrupa(GrupaDto groupDto){
-        Grupa group = new Grupa(groupDto.getNr(), groupDto.getPrzedmiot());
+        Grupa group = new Grupa(groupDto.getPrzedmiot());
         group = repository.save(group);
         return grupaDtoMapper.convertToDto(group);
     }
@@ -48,7 +48,6 @@ public class GrupaService {
     public GrupaDto modifyGrupa(final Long groupDtoId, final GrupaDto groupDto){
         Optional<Grupa> grupa = repository.findById(groupDtoId);
         Grupa grupa1 = grupa.get();
-        grupa1.setNr(groupDto.getNr());
         grupa1.setPrzedmiot(groupDto.getPrzedmiot());
         repository.save(grupa1);
         return grupaDtoMapper.convertToDto(grupa1);

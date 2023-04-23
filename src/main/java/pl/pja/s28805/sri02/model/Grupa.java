@@ -13,11 +13,11 @@ public class Grupa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long nr;
     private String przedmiot;
 
-    public Grupa(final Long nr, final String przedmiot){
-        this.nr = nr;
+    public Grupa(final String przedmiot){
         this.przedmiot = przedmiot;
     }
 
