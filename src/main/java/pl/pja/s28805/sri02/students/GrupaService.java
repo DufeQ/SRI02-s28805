@@ -1,6 +1,7 @@
 package pl.pja.s28805.sri02.students;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Component;
 import pl.pja.s28805.sri02.dto.GrupaDetailsDto;
 import pl.pja.s28805.sri02.dto.GrupaDto;
@@ -11,10 +12,14 @@ import pl.pja.s28805.sri02.model.Grupa;
 import pl.pja.s28805.sri02.model.Student;
 import pl.pja.s28805.sri02.repository.GrupaRepository;
 import pl.pja.s28805.sri02.repository.StudentRepository;
+import pl.pja.s28805.sri02.rest.GrupaController;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 //Student service implementuje StudentRepository
@@ -29,12 +34,17 @@ public class GrupaService {
     private final StudentDtoMapper studentDtoMapper;
 
 
-    public List<GrupaDto> getGrupy(){
+    public CollectionModel<GrupaDto> getGrupy(){
         final List<Grupa> groupList = grupaRepository.findAll();
         final List<GrupaDto> groupDtoList = groupList.stream()
                 .map(grupaDtoMapper::convertToDto)
                 .collect(Collectors.toList());
-        return groupDtoList;
+        for (GrupaDto dto : groupDtoList){
+            dto.add(linkTo(methodOn(GrupaController.class).getGrupaById(dto.getId())).withSelfRel());
+            //dto.add(linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(dto.getId())).withSelfRel());
+        }
+        CollectionModel<GrupaDto> res = CollectionModel.of(groupDtoList, linkTo(methodOn(GrupaController.class).getGrupy()).withSelfRel());
+        return res;
     }
 
     public GrupaDetailsDto getGrupaById(final Long groupId) {

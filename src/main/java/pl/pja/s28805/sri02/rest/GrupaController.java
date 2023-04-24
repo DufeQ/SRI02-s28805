@@ -1,6 +1,10 @@
 package pl.pja.s28805.sri02.rest;
 
 import lombok.RequiredArgsConstructor;
+//LINK byl ze złego pakietu wybrany
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +26,26 @@ public class GrupaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GrupaDetailsDto> getGrupaById(@PathVariable final Long id) {
-        GrupaDetailsDto grupaDto = grupaService.getGrupaById(id);
-        if (grupaDto == null)
+        GrupaDetailsDto grupaDetailsDto = grupaService.getGrupaById(id);
+
+        if (grupaDetailsDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        else
-            return ResponseEntity.ok(grupaDto);
+            //return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+        else {
+            //Link linkSelf = new Link("http://localhost:8080/api/groups/" + id); - nie dziala
+            //grupaDetailsDto.add(Link.of("http://localhost:8080/api/groups/" + id));
+            //Link linkself = linkTo(methodOn(GrupaController.class).getGrupaById(id)).withSelfRel();
+            grupaDetailsDto.add(linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(grupaDetailsDto.getId())).withSelfRel());
+            grupaDetailsDto.add(linkTo(methodOn(GrupaController.class).getGrupaById(id)).withSelfRel());
+            return ResponseEntity.ok(grupaDetailsDto);
+            //return new ResponseEntity<>(grupaDetailsDto, HttpStatus.OK);
+        }
     }
 
 
     @GetMapping
-    public ResponseEntity<List<GrupaDto>> getGrupy(){
+    public ResponseEntity<CollectionModel<GrupaDto>> getGrupy(){
         return ResponseEntity.ok(grupaService.getGrupy());
     }
 
