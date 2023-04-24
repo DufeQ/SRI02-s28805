@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.pja.s28805.sri02.dto.GrupaDetailsDto;
 import pl.pja.s28805.sri02.dto.GrupaDto;
+import pl.pja.s28805.sri02.dto.StudentDto;
 import pl.pja.s28805.sri02.students.GrupaService;
 import pl.pja.s28805.sri02.students.StudentService;
 
@@ -34,6 +35,14 @@ public class GrupaController {
         return ResponseEntity.ok(grupaService.getGrupy());
     }
 
+    @GetMapping("/{grupaId}/students")
+    public ResponseEntity<List<StudentDto>> getStudentsByGrupaId(@PathVariable final Long grupaId) {
+//        GrupaDetailsDto grupaDto = grupaService.getStudentsByGrupaId(grupaId);
+//        if (grupaDto == null)
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+//        else
+        return ResponseEntity.ok(grupaService.getStudentsByGrupaId(grupaId));
+    }
     @PostMapping
     public ResponseEntity<GrupaDto> addGrupa(@RequestBody final GrupaDto groupDto){
                 return ResponseEntity

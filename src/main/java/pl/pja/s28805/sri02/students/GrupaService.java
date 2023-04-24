@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.pja.s28805.sri02.dto.GrupaDetailsDto;
 import pl.pja.s28805.sri02.dto.GrupaDto;
+import pl.pja.s28805.sri02.dto.StudentDto;
 import pl.pja.s28805.sri02.dto.mapper.GrupaDtoMapper;
+import pl.pja.s28805.sri02.dto.mapper.StudentDtoMapper;
 import pl.pja.s28805.sri02.model.Grupa;
 import pl.pja.s28805.sri02.model.Student;
 import pl.pja.s28805.sri02.repository.GrupaRepository;
@@ -24,6 +26,7 @@ public class GrupaService {
     private final GrupaRepository grupaRepository;
     private final StudentRepository studentRepository;
     private final GrupaDtoMapper grupaDtoMapper;
+    private final StudentDtoMapper studentDtoMapper;
 
 
     public List<GrupaDto> getGrupy(){
@@ -42,8 +45,17 @@ public class GrupaService {
             return null;
     }
 
-    public GrupaDto addGrupa(GrupaDto groupDto){
-        Grupa group = new Grupa(groupDto.getNr(), groupDto.getPrzedmiot());
+    public List<StudentDto> getStudentsByGrupaId(final Long grupaId) {
+        final List<Student> studentList = grupaRepository.getStudentsByGrupaId(grupaId);
+        final List<StudentDto> studentDtoList = studentList.stream()
+                .map(studentDtoMapper::convertToDto)
+                .collect(Collectors.toList());
+        return studentDtoList;
+    }
+
+
+    public GrupaDto addGrupa(GrupaDto grupaDto){
+        Grupa group = new Grupa(grupaDto.getNr(), grupaDto.getPrzedmiot());
         group = grupaRepository.save(group);
         return grupaDtoMapper.convertToDto(group);
     }
