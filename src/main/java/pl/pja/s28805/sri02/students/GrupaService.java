@@ -13,6 +13,7 @@ import pl.pja.s28805.sri02.model.Student;
 import pl.pja.s28805.sri02.repository.GrupaRepository;
 import pl.pja.s28805.sri02.repository.StudentRepository;
 import pl.pja.s28805.sri02.rest.GrupaController;
+import pl.pja.s28805.sri02.rest.StudentsController;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class GrupaService {
                 .map(studentDtoMapper::convertToDto)
                 .collect(Collectors.toList());
         for (StudentDto dto : studentDtoList){
-            dto.add(linkTo(methodOn(GrupaController.class).getGrupaById(dto.getId())).withSelfRel());
+            dto.add(linkTo(methodOn(StudentsController.class).getStudentById(dto.getId())).withSelfRel());
             //dto.add(linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(dto.getId())).withSelfRel());
         }
         CollectionModel<StudentDto> res = CollectionModel.of(studentDtoList, linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(grupaId)).withSelfRel());

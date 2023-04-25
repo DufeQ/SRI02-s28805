@@ -2,6 +2,7 @@ package pl.pja.s28805.sri02.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,15 +32,17 @@ public class StudentsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentDto>> getStudents(){
+    public ResponseEntity<CollectionModel<StudentDto>> getStudents(){
         return ResponseEntity.ok(studentService.getStudents());
     }
 
     @PostMapping
     public ResponseEntity<StudentDto> addStudent(@Valid @RequestBody final StudentDto studentDto){
-                return ResponseEntity
+        StudentDto studentDto1 = studentService.addStudent(studentDto);
+        Long temp = studentDto1.getId();
+        return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(studentService.addStudent(studentDto));
+                .body(studentDto1.add(linkTo(methodOn(StudentsController.class).getStudentById(temp)).withSelfRel()));
     }
 
 
@@ -48,7 +51,9 @@ public class StudentsController {
         if (studentService.getStudentById(id) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         else {
-            return ResponseEntity.ok(studentService.modifyStudent(id, studentDto));
+            StudentDto studentDto1 = studentService.modifyStudent(id, studentDto);
+            Long temp = studentDto1.getId();
+            return ResponseEntity.ok(studentDto1.add(linkTo(methodOn(StudentsController.class).getStudentById(temp)).withSelfRel()));
         }
     }
 
@@ -57,8 +62,8 @@ public class StudentsController {
         if (studentService.getStudentById(id) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         else {
-            studentService.deleteStudent(id);
-            return ResponseEntity.ok(null);
+            StudentDto studentDto = studentService.deleteStudent(id);
+            return ResponseEntity.ok(studentDto);
         }
     }
 }
