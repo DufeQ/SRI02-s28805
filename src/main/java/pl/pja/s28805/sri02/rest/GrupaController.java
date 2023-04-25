@@ -1,5 +1,6 @@
 package pl.pja.s28805.sri02.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 //LINK byl ze złego pakietu wybrany
 import org.springframework.hateoas.CollectionModel;
@@ -58,7 +59,7 @@ public class GrupaController {
         return ResponseEntity.ok(grupaService.getStudentsByGrupaId(grupaId));
     }
     @PostMapping
-    public ResponseEntity<GrupaDto> addGrupa(@RequestBody final GrupaDto groupDto){
+    public ResponseEntity<GrupaDto> addGrupa(@Valid @RequestBody final GrupaDto groupDto){
                 return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(grupaService.addGrupa(groupDto));

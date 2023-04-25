@@ -15,10 +15,10 @@ public class Grupa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Long nr;
+    private String nr;
     private String rok;
 
-    public Grupa(final Long nr, final String rok){
+    public Grupa(final String nr, final String rok){
         this.nr = nr;
         this.rok = rok;
     }
