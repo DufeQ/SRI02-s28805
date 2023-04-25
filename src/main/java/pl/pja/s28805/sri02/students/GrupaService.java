@@ -113,6 +113,7 @@ public class GrupaService {
     public GrupaDto deleteGrupa(final Long id){
         Optional<Grupa> group = grupaRepository.findById(id);
         Grupa group1 = group.get();
+        group1.getStudents().stream().forEach(student -> student.setGrupa(null));
         grupaRepository.delete(group1);
         return grupaDtoMapper.convertToDto(group1);
     }
