@@ -16,11 +16,11 @@ public class Grupa {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long nr;
-    private String przedmiot;
+    private String rok;
 
-    public Grupa(final Long nr, final String przedmiot){
+    public Grupa(final Long nr, final String rok){
         this.nr = nr;
-        this.przedmiot = przedmiot;
+        this.rok = rok;
     }
 
     @OneToMany(mappedBy = "grupa")

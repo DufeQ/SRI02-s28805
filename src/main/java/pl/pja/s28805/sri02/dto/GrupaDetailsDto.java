@@ -14,7 +14,7 @@ import java.util.Set;
 public class GrupaDetailsDto extends RepresentationModel<GrupaDetailsDto> {
     private Long id;
     private Long nr;
-    private String przedmiot;
+    private String rok;
 
     private Set<StudentDto> students;
 

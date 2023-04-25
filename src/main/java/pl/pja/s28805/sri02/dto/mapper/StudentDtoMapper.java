@@ -11,7 +11,8 @@ import pl.pja.s28805.sri02.model.Student;
 public class StudentDtoMapper {
     private final ModelMapper modelMapper;
 
-    public StudentDto convertToDto(Student stud) {return modelMapper.map(stud, StudentDto.class);}
+    public StudentDto convertToDto(Student stud) {
+        return modelMapper.map(stud, StudentDto.class);}
     public Student convertToStudent(StudentDto stud) {return modelMapper.map(stud, Student.class);}
 
 }

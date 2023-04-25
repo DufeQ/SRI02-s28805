@@ -65,7 +65,7 @@ public class GrupaService {
 
 
     public GrupaDto addGrupa(GrupaDto grupaDto){
-        Grupa group = new Grupa(grupaDto.getNr(), grupaDto.getPrzedmiot());
+        Grupa group = new Grupa(grupaDto.getNr(), grupaDto.getRok());
         group = grupaRepository.save(group);
         return grupaDtoMapper.convertToDto(group);
     }
@@ -74,7 +74,7 @@ public class GrupaService {
     public GrupaDto modifyGrupa(final Long groupDtoId, final GrupaDto groupDto){
         Optional<Grupa> grupa = grupaRepository.findById(groupDtoId);
         Grupa grupa1 = grupa.get();
-        grupa1.setPrzedmiot(groupDto.getPrzedmiot());
+        grupa1.setRok(groupDto.getRok());
         grupa1.setNr(groupDto.getNr());
         grupaRepository.save(grupa1);
         return grupaDtoMapper.convertToDto(grupa1);
@@ -85,8 +85,18 @@ public class GrupaService {
         Grupa grupa1 = grupa.get();
         Optional<Student> student = studentRepository.findById(idStudent);
         Student student1 = student.get();
-        student1.setGrupa(grupa1);
-        grupa1.getStudents().add(student1);
+        if (student1.getGrupa() == null){
+            student1.setGrupa(grupa1);
+            grupa1.getStudents().add(student1);
+        }
+        else if (student1.getGrupa().getId() != groupDetailsDtoId/* && grupa1.getStudents().contains(student1)*/) {
+            student1.setGrupa(grupa1);
+            grupa1.getStudents().add(student1);
+        }
+        else {
+            grupa1.getStudents().remove(student1);
+            student1.setGrupa(null);
+        }
         grupaRepository.save(grupa1);
         studentRepository.save(student1);
         return grupaDtoMapper.convertToDtoDetails(grupa1);

@@ -10,6 +10,9 @@ import pl.pja.s28805.sri02.students.StudentService;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/students")
@@ -23,6 +26,7 @@ public class StudentsController {
         if (studentDto == null)
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else
+            studentDto.add(linkTo(methodOn(StudentsController.class).getStudentById(id)).withSelfRel());
             return ResponseEntity.ok(studentDto);
     }
 

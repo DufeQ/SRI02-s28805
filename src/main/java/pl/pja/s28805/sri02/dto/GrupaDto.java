@@ -12,5 +12,5 @@ import org.springframework.hateoas.RepresentationModel;
 public class GrupaDto extends RepresentationModel<GrupaDto> {
     private Long id;
     private Long nr;
-    private String przedmiot;
+    private String rok;
 }
