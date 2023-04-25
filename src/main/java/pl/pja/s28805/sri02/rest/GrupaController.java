@@ -51,7 +51,7 @@ public class GrupaController {
     }
 
     @GetMapping("/{grupaId}/students")
-    public ResponseEntity<List<StudentDto>> getStudentsByGrupaId(@PathVariable final Long grupaId) {
+    public ResponseEntity<CollectionModel<StudentDto>> getStudentsByGrupaId(@PathVariable final Long grupaId) {
 //        GrupaDetailsDto grupaDto = grupaService.getStudentsByGrupaId(grupaId);
 //        if (grupaDto == null)
 //            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
@@ -60,9 +60,14 @@ public class GrupaController {
     }
     @PostMapping
     public ResponseEntity<GrupaDto> addGrupa(@Valid @RequestBody final GrupaDto groupDto){
-                return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(grupaService.addGrupa(groupDto));
+
+        GrupaDto grupaDto = grupaService.addGrupa(groupDto);
+        Long temp = grupaDto.getId();//to jest potrzebne, żeby w linku była liczba a nie "{id}"
+//                return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(grupaService.addGrupa(groupDto).add(linkTo(methodOn(GrupaController.class).getGrupaById(groupDto.getId())).withSelfRel()));
+        return ResponseEntity.ok(grupaDto.add(linkTo(methodOn(GrupaController.class).getGrupaById(temp)).withSelfRel()));//status(HttpStatus.CREATED).body
+
     }
 
 
@@ -71,7 +76,9 @@ public class GrupaController {
         if (grupaService.getGrupaById(id) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         else {
-            return ResponseEntity.ok(grupaService.modifyGrupa(id, grupaDto));
+            GrupaDto grupaDto2 = grupaService.modifyGrupa(id ,grupaDto);
+            Long temp = grupaDto2.getId();
+            return ResponseEntity.ok(grupaDto2.add(linkTo(methodOn(GrupaController.class).getGrupaById(temp)).withSelfRel()));
         }
     }
 
@@ -80,10 +87,15 @@ public class GrupaController {
         if (studentService.getStudentById(idStudent) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         else {
-            if (grupaService.getGrupaById(id) == null)
+            if (grupaService.getGrupaById(id) == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
             else {
-                return ResponseEntity.ok(grupaService.modifyGrupa(id, idStudent));
+                GrupaDetailsDto grupaDetailsDto = grupaService.modifyGrupa(id, idStudent);
+                grupaDetailsDto.add(linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(id)).withSelfRel());
+                grupaDetailsDto.add(linkTo(methodOn(GrupaController.class).getGrupaById(id)).withSelfRel());
+                return ResponseEntity.ok(grupaDetailsDto);
+
             }
         }
     }
@@ -92,8 +104,8 @@ public class GrupaController {
         if (grupaService.getGrupaById(id) == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         else {
-            grupaService.deleteGrupa(id);
-            return ResponseEntity.ok(null);
+            GrupaDto grupaDto = grupaService.deleteGrupa(id);
+            return ResponseEntity.ok(grupaDto.add(linkTo(methodOn(GrupaController.class).getGrupaById(id)).withSelfRel()));
         }
     }
 }

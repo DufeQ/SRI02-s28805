@@ -55,12 +55,17 @@ public class GrupaService {
             return null;
     }
 
-    public List<StudentDto> getStudentsByGrupaId(final Long grupaId) {
+    public CollectionModel<StudentDto> getStudentsByGrupaId(final Long grupaId) {
         final List<Student> studentList = grupaRepository.getStudentsByGrupaId(grupaId);
         final List<StudentDto> studentDtoList = studentList.stream()
                 .map(studentDtoMapper::convertToDto)
                 .collect(Collectors.toList());
-        return studentDtoList;
+        for (StudentDto dto : studentDtoList){
+            dto.add(linkTo(methodOn(GrupaController.class).getGrupaById(dto.getId())).withSelfRel());
+            //dto.add(linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(dto.getId())).withSelfRel());
+        }
+        CollectionModel<StudentDto> res = CollectionModel.of(studentDtoList, linkTo(methodOn(GrupaController.class).getStudentsByGrupaId(grupaId)).withSelfRel());
+        return res;
     }
 
 
@@ -77,6 +82,7 @@ public class GrupaService {
         grupa1.setRok(groupDto.getRok());
         grupa1.setNr(groupDto.getNr());
         grupaRepository.save(grupa1);
+
         return grupaDtoMapper.convertToDto(grupa1);
     }
 
@@ -104,10 +110,11 @@ public class GrupaService {
 
 
 
-    public void deleteGrupa(final Long id){
+    public GrupaDto deleteGrupa(final Long id){
         Optional<Grupa> group = grupaRepository.findById(id);
         Grupa group1 = group.get();
         grupaRepository.delete(group1);
+        return grupaDtoMapper.convertToDto(group1);
     }
 
 
